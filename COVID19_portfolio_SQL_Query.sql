@@ -5,14 +5,14 @@ Skills used: Subquery, Joins, CTE's, Temp Tables, Windows Functions, Aggregate F
 
 */
 
---Досліджуємо дані відносно фіксованої смертності внаслідок зараження Covid
+--Data exploration on mortality due to Covid infection
 
 SELECT *
 FROM COVID_project..CovidDeaths
 WHERE continent IS NOT NULL
 ORDER BY 3, 4
 
---Обираємо колонки даних, з якими в подальшому будемо працювати
+--Select Data that we are going to be starting with
 
 SELECT 
 	location
@@ -26,7 +26,7 @@ WHERE continent IS NOT NULL
 ORDER BY 1, 2
 
 --Total Cases vs Total Deaths
---Демонструє ймовірність смерті, при заражені COVID. Звужуємо дані до локалізації в Україні
+--Shows the likelihood of dying if you contract Covid (we narrow the data to localization in Ukraine)
 
 SELECT 
 	location
@@ -42,7 +42,7 @@ ORDER BY 1, 2
 
 
 --Total Cases vs Population
---Демонструє відсоток населення, що зазнав інфікації Covid
+--Shows what percentage of the population infected with Covid
 
 SELECT 
 	location
@@ -55,7 +55,7 @@ FROM COVID_project..CovidDeaths
 WHERE continent IS NOT NULL
 ORDER BY 1, 2
 
---Країни з найвищим показником інфікування відносно кількості населення
+--Countries with the Highest Infection Rate compared to Population
 
 SELECT 
 	location
@@ -67,8 +67,8 @@ WHERE continent IS NOT NULL
 GROUP BY location, population
 ORDER BY 4 DESC
 
---Перші країни, що зафіксували випадки інфікування Covid 
---(Дати, в які країнами було репортовано про перші випадки інфікування Covid)
+--ГЏГҐГ°ГёВі ГЄГ°Г ВїГ­ГЁ, Г№Г® Г§Г ГґВіГЄГ±ГіГўГ Г«ГЁ ГўГЁГЇГ Г¤ГЄГЁ ВіГ­ГґВіГЄГіГўГ Г­Г­Гї Covid 
+--(Г„Г ГІГЁ, Гў ГїГЄВі ГЄГ°Г ВїГ­Г Г¬ГЁ ГЎГіГ«Г® Г°ГҐГЇГ®Г°ГІГ®ГўГ Г­Г® ГЇГ°Г® ГЇГҐГ°ГёВі ГўГЁГЇГ Г¤ГЄГЁ ВіГ­ГґВіГЄГіГўГ Г­Г­Гї Covid)
 
 SELECT 
 	continent
@@ -81,7 +81,7 @@ GROUP BY continent, location
 HAVING MIN(total_cases) IS NOT NULL
 ORDER BY 3
 
---Країни з найвищим рахунком смертей з причини зараження Covid
+--ГЉГ°Г ВїГ­ГЁ Г§ Г­Г Г©ГўГЁГ№ГЁГ¬ Г°Г ГµГіГ­ГЄГ®Г¬ Г±Г¬ГҐГ°ГІГҐГ© Г§ ГЇГ°ГЁГ·ГЁГ­ГЁ Г§Г Г°Г Г¦ГҐГ­Г­Гї Covid
 
 SELECT 
 	location
@@ -93,8 +93,8 @@ ORDER BY 2 DESC
 
 --------------------BREAKING THINGS DOWN BY CONTINENT--------------------
 
---Демонструє загальну кількість смертей в межах континенту
---(Континенти з зафіксованою кількістю смертей від Covid в порядку спадання)
+--Г„ГҐГ¬Г®Г­Г±ГІГ°ГіВє Г§Г ГЈГ Г«ГјГ­Гі ГЄВіГ«ГјГЄВіГ±ГІГј Г±Г¬ГҐГ°ГІГҐГ© Гў Г¬ГҐГ¦Г Гµ ГЄГ®Г­ГІГЁГ­ГҐГ­ГІГі
+--(ГЉГ®Г­ГІГЁГ­ГҐГ­ГІГЁ Г§ Г§Г ГґВіГЄГ±Г®ГўГ Г­Г®Гѕ ГЄВіГ«ГјГЄВіГ±ГІГѕ Г±Г¬ГҐГ°ГІГҐГ© ГўВіГ¤ Covid Гў ГЇГ®Г°ГїГ¤ГЄГі Г±ГЇГ Г¤Г Г­Г­Гї)
 
 SELECT 
 	tdc.continent
@@ -109,8 +109,8 @@ FROM (  SELECT
 GROUP BY tdc.continent
 Order By 2 DESC
 
-----Додамо до результату запиту загальну кількість смертей і виведемо відсоток, який відповідатиме даним по континентах
---(Використовіємо CTE для розрахунку)
+----Г„Г®Г¤Г Г¬Г® Г¤Г® Г°ГҐГ§ГіГ«ГјГІГ ГІГі Г§Г ГЇГЁГІГі Г§Г ГЈГ Г«ГјГ­Гі ГЄВіГ«ГјГЄВіГ±ГІГј Г±Г¬ГҐГ°ГІГҐГ© Ві ГўГЁГўГҐГ¤ГҐГ¬Г® ГўВіГ¤Г±Г®ГІГ®ГЄ, ГїГЄГЁГ© ГўВіГ¤ГЇГ®ГўВіГ¤Г ГІГЁГ¬ГҐ Г¤Г Г­ГЁГ¬ ГЇГ® ГЄГ®Г­ГІГЁГ­ГҐГ­ГІГ Гµ
+--(Г‚ГЁГЄГ®Г°ГЁГ±ГІГ®ГўВіВєГ¬Г® CTE Г¤Г«Гї Г°Г®Г§Г°Г ГµГіГ­ГЄГі)
 
 WITH CTE_TotalDeathContinent AS 
 (
@@ -138,13 +138,13 @@ ORDER BY 2 DESC
 ------------------------------GLOBAL NUMBERS------------------------------
 
 --Total Cases per Day in the World VS Total Deaths per Day in the World
---(Співвідношення даних зараження та смертності за днями)
+--(Г‘ГЇВіГўГўВіГ¤Г­Г®ГёГҐГ­Г­Гї Г¤Г Г­ГЁГµ Г§Г Г°Г Г¦ГҐГ­Г­Гї ГІГ  Г±Г¬ГҐГ°ГІГ­Г®Г±ГІВі Г§Г  Г¤Г­ГїГ¬ГЁ)
 
 SELECT 
 	date
 	, SUM(total_cases)                                                  AS total_cases_in_the_world
 	, SUM(cast(total_deaths as int))                                    AS total_deaths_in_the_world
-	, ROUND((SUM(cast(total_deaths as int))/SUM(total_cases))*100, 2)   AS DeathPercentage              --(співвідношення)     --in whole world per day
+	, ROUND((SUM(cast(total_deaths as int))/SUM(total_cases))*100, 2)   AS DeathPercentage              --(Г±ГЇВіГўГўВіГ¤Г­Г®ГёГҐГ­Г­Гї)     --in whole world per day
 --	, SUM(cast(new_deaths as int))                                      AS new_deaths_per_day
 --	, ROUND((SUM(cast(new_deaths as int))/SUM(total_cases))*100, 2)     AS WorldWideDeathPercentagePerDay
 FROM COVID_project..CovidDeaths
@@ -152,7 +152,7 @@ WHERE continent IS NOT NULL
 GROUP BY date
 ORDER BY 1
 
---Дні, в які було зафіксовано найбільше число смертей з причини Сovid по світу
+--Г„Г­Ві, Гў ГїГЄВі ГЎГіГ«Г® Г§Г ГґВіГЄГ±Г®ГўГ Г­Г® Г­Г Г©ГЎВіГ«ГјГёГҐ Г·ГЁГ±Г«Г® Г±Г¬ГҐГ°ГІГҐГ© Г§ ГЇГ°ГЁГ·ГЁГ­ГЁ Г‘ovid ГЇГ® Г±ГўВіГІГі
 
 SELECT 
 	date
@@ -162,17 +162,17 @@ WHERE continent IS NOT NULL
 GROUP BY date
 ORDER BY 2 DESC
 
--- Загальна кількість захворілих та померлих по світу
+-- Г‡Г ГЈГ Г«ГјГ­Г  ГЄВіГ«ГјГЄВіГ±ГІГј Г§Г ГµГўГ®Г°ВіГ«ГЁГµ ГІГ  ГЇГ®Г¬ГҐГ°Г«ГЁГµ ГЇГ® Г±ГўВіГІГі
 
 SELECT 
 	SUM(new_cases)                                                     AS total_new_cases
 	, SUM(cast(new_deaths as int))                                     AS total_new_deaths
 	, ROUND((SUM(cast(new_deaths as int))/SUM(new_cases))*100, 2)      AS DeathPercentage
 FROM COVID_project..CovidDeaths
-WHERE continent IS NOT NULL                   --без зареєстрованих 22.01.2020 (бо їх не віднесли в список нових надходжень або нових смертей)
+WHERE continent IS NOT NULL                   --ГЎГҐГ§ Г§Г Г°ГҐВєГ±ГІГ°Г®ГўГ Г­ГЁГµ 22.01.2020 (ГЎГ® ВїГµ Г­ГҐ ГўВіГ¤Г­ГҐГ±Г«ГЁ Гў Г±ГЇГЁГ±Г®ГЄ Г­Г®ГўГЁГµ Г­Г Г¤ГµГ®Г¤Г¦ГҐГ­Гј Г ГЎГ® Г­Г®ГўГЁГµ Г±Г¬ГҐГ°ГІГҐГ©)
 
 
---(Використовіємо CTE для розрахунку)
+--(Г‚ГЁГЄГ®Г°ГЁГ±ГІГ®ГўВіВєГ¬Г® CTE Г¤Г«Гї Г°Г®Г§Г°Г ГµГіГ­ГЄГі)
 
 WITH CTE_cases_deaths AS
 (
@@ -201,19 +201,19 @@ SELECT
 	*
 	, ROUND((total_new_deaths /total_new_cases)*100, 2)            AS DeathPercentage
 FROM CTE_cases_deaths
-                                                           --з зареєстрованими даними за 22.01.2020
+                                                           --Г§ Г§Г Г°ГҐВєГ±ГІГ°Г®ГўГ Г­ГЁГ¬ГЁ Г¤Г Г­ГЁГ¬ГЁ Г§Г  22.01.2020
 													
 
 ------------------------------Population vs Vaccinations------------------------------
 
---Доєднуємо для дослідження дані з таблиці вакцинації
+--Г„Г®ВєГ¤Г­ГіВєГ¬Г® Г¤Г«Гї Г¤Г®Г±Г«ВіГ¤Г¦ГҐГ­Г­Гї Г¤Г Г­Ві Г§ ГІГ ГЎГ«ГЁГ¶Ві ГўГ ГЄГ¶ГЁГ­Г Г¶ВіВї
 
 SELECT *
 FROM COVID_project..CovidVaccinations
 WHERE continent IS NOT NULL
 ORDER BY 3, 4
 
---Загальна кількість проведення вакцинування в світі за день
+--Г‡Г ГЈГ Г«ГјГ­Г  ГЄВіГ«ГјГЄВіГ±ГІГј ГЇГ°Г®ГўГҐГ¤ГҐГ­Г­Гї ГўГ ГЄГ¶ГЁГ­ГіГўГ Г­Г­Гї Гў Г±ГўВіГІВі Г§Г  Г¤ГҐГ­Гј
 
 SELECT                                             
 --	death.continent, death.location,                 
@@ -227,7 +227,7 @@ WHERE death.continent IS NOT NULL
 GROUP BY death.date
 ORDER BY 1
 
---Скільки вакцинацій було здійснено кожного дня в межах країн
+--Г‘ГЄВіГ«ГјГЄГЁ ГўГ ГЄГ¶ГЁГ­Г Г¶ВіГ© ГЎГіГ«Г® Г§Г¤ВіГ©Г±Г­ГҐГ­Г® ГЄГ®Г¦Г­Г®ГЈГ® Г¤Г­Гї Гў Г¬ГҐГ¦Г Гµ ГЄГ°Г ВїГ­
 
 SELECT 
 	death.continent
@@ -241,8 +241,8 @@ JOIN COVID_project..CovidVaccinations vac
 WHERE death.continent IS NOT NULL
 ORDER BY 2, 3
 
---Відсоткове співвідношення населення та здійснених вакцинацій від Covid
---(Використовіємо CTE для розрахунку)
+--Г‚ВіГ¤Г±Г®ГІГЄГ®ГўГҐ Г±ГЇВіГўГўВіГ¤Г­Г®ГёГҐГ­Г­Гї Г­Г Г±ГҐГ«ГҐГ­Г­Гї ГІГ  Г§Г¤ВіГ©Г±Г­ГҐГ­ГЁГµ ГўГ ГЄГ¶ГЁГ­Г Г¶ВіГ© ГўВіГ¤ Covid
+--(Г‚ГЁГЄГ®Г°ГЁГ±ГІГ®ГўВіВєГ¬Г® CTE Г¤Г«Гї Г°Г®Г§Г°Г ГµГіГ­ГЄГі)
 
 WITH CTE_running_totals_of_vaccinations AS
 (
@@ -271,7 +271,7 @@ FROM CTE_running_totals_of_vaccinations
 GROUP BY continent, location
 ORDER BY 2 
 
---(Використовуємо Temp_Table для розрахунку) 
+--(Г‚ГЁГЄГ®Г°ГЁГ±ГІГ®ГўГіВєГ¬Г® Temp_Table Г¤Г«Гї Г°Г®Г§Г°Г ГµГіГ­ГЄГі) 
 
 DROP TABLE IF EXISTS #temp
 
@@ -311,7 +311,7 @@ FROM #temp
 GROUP BY Continent, Location
 ORDER BY 2
 
---Найбільші показники відсотку населення, що пройшов повну вакцинацію, серед країн
+--ГЌГ Г©ГЎВіГ«ГјГёВі ГЇГ®ГЄГ Г§Г­ГЁГЄГЁ ГўВіГ¤Г±Г®ГІГЄГі Г­Г Г±ГҐГ«ГҐГ­Г­Гї, Г№Г® ГЇГ°Г®Г©ГёГ®Гў ГЇГ®ГўГ­Гі ГўГ ГЄГ¶ГЁГ­Г Г¶ВіГѕ, Г±ГҐГ°ГҐГ¤ ГЄГ°Г ВїГ­
 
 SELECT                                             
 	death.continent
