@@ -67,8 +67,8 @@ WHERE continent IS NOT NULL
 GROUP BY location, population
 ORDER BY 4 DESC
 
---Ïåðø³ êðà¿íè, ùî çàô³êñóâàëè âèïàäêè ³íô³êóâàííÿ Covid 
---(Äàòè, â ÿê³ êðà¿íàìè áóëî ðåïîðòîâàíî ïðî ïåðø³ âèïàäêè ³íô³êóâàííÿ Covid)
+--First countries to record Covid infections
+--(Dates on which countries were reporting first cases of Covid infections)
 
 SELECT 
 	continent
@@ -81,7 +81,7 @@ GROUP BY continent, location
 HAVING MIN(total_cases) IS NOT NULL
 ORDER BY 3
 
---Êðà¿íè ç íàéâèùèì ðàõóíêîì ñìåðòåé ç ïðè÷èíè çàðàæåííÿ Covid
+--Countries with the Highest Death Count due to Covid infection
 
 SELECT 
 	location
@@ -93,12 +93,12 @@ ORDER BY 2 DESC
 
 --------------------BREAKING THINGS DOWN BY CONTINENT--------------------
 
---Äåìîíñòðóº çàãàëüíó ê³ëüê³ñòü ñìåðòåé â ìåæàõ êîíòèíåíòó
---(Êîíòèíåíòè ç çàô³êñîâàíîþ ê³ëüê³ñòþ ñìåðòåé â³ä Covid â ïîðÿäêó ñïàäàííÿ)
+--Shows the total number of deaths within the continent
+--(Continents with recorded number of Covid deaths in descending order)
 
 SELECT 
 	tdc.continent
-	, SUM(tdc.TotalDeathCount)                                AS TotalDeathPerContinentCount
+	, SUM(tdc.TotalDeathCount)                                        AS TotalDeathPerContinentCount
 FROM (  SELECT 
 			continent
 			, location
@@ -109,8 +109,8 @@ FROM (  SELECT
 GROUP BY tdc.continent
 Order By 2 DESC
 
-----Äîäàìî äî ðåçóëüòàòó çàïèòó çàãàëüíó ê³ëüê³ñòü ñìåðòåé ³ âèâåäåìî â³äñîòîê, ÿêèé â³äïîâ³äàòèìå äàíèì ïî êîíòèíåíòàõ
---(Âèêîðèñòîâ³ºìî CTE äëÿ ðîçðàõóíêó)
+--Adds to the result of the query the total number of deaths and derives the percentage that will correspond to the data on the continents
+--(Using CTE to perform Calculation)
 
 WITH CTE_TotalDeathContinent AS 
 (
