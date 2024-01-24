@@ -58,12 +58,6 @@ WHERE nhd1.PropertyAddress IS NULL
 
 --Breaking out Address Into Individual Columns (Address, City, State)
 
-SELECT*
-FROM Nashville_Housing_Data
-
-SELECT PropertyAddress       
-FROM Data_Cleaning_Project..Nashville_Housing_Data
-
 SELECT 
 	PropertyAddress
 	, SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1)                       AS Address
@@ -89,9 +83,6 @@ SELECT
 FROM Nashville_Housing_Data
 
 --------------------------------------
-
-SELECT OwnerAddress
-FROM Nashville_Housing_Data
 
 SELECT
 	OwnerAddress
