@@ -4,7 +4,7 @@ Cleaning Data in SQL Queries
 
 */
 
-SELECT*
+SELECT *
 FROM Data_Cleaning_Project..Nashville_Housing_Data
 
 --Standardize Date Format
