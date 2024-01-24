@@ -12,7 +12,6 @@ FROM Data_Cleaning_Project..Nashville_Housing_Data
 SELECT 
 	SaleDate
 	, cast(SaleDate as date)                        AS date_without_time
-	--CONVERT (date,SaleDate)
 FROM Data_Cleaning_Project..Nashville_Housing_Data
 
 ALTER TABLE Nashville_Housing_Data
@@ -133,11 +132,6 @@ FROM Data_Cleaning_Project..Nashville_Housing_Data
 SELECT SoldAsVacant
 FROM Nashville_Housing_Data
 
-	--SELECT DISTINCT(SoldAsVacant), COUNT(SoldAsVacant) AS Count, SUM(COUNT(SoldAsVacant)) OVER () AS Total
-	--FROM Nashville_Housing_Data
-	--GROUP BY SoldAsVacant
-	--ORDER BY 2
-
 SELECT DISTINCT(SoldAsVacant)
 FROM Data_Cleaning_Project..Nashville_Housing_Data
 WHERE SoldAsVacant <> 'Yes' AND SoldAsVacant <> 'No'
@@ -146,14 +140,6 @@ SELECT
 	IIF(SoldAsVacant = 'N', 'No', 'Yes')
 FROM Data_Cleaning_Project..Nashville_Housing_Data
 WHERE SoldAsVacant <> 'Yes' AND SoldAsVacant <> 'No'
-
-	--SELECT SoldAsVacant
-	--, Case
-	--	WHEN SoldAsVacant = 'N' THEN 'No'
-	--	WHEN SoldAsVacant =  'Y' THEN 'Yes'
-	--	ELSE SoldAsVacant
-	--END
-	--FROM Nashville_Housing_Data
 
 UPDATE Nashville_Housing_Data
 SET SoldAsVacant = IIF(SoldAsVacant = 'N', 'No', 'Yes')
@@ -167,7 +153,7 @@ WITH CTE_find_duplicate AS
 (
 	SELECT 
 		*
-		, ROW_NUMBER() OVER (PARTITION BY ParcelID, PropertyAddress, SalePrice, SaleDate, LegalReference ORDER BY UniqueID) AS row_num
+		, ROW_NUMBER() OVER (PARTITION BY ParcelID, PropertyAddress, SalePrice, SaleDate, LegalReference ORDER BY UniqueID)     AS row_num
 	FROM Data_Cleaning_Project..Nashville_Housing_Data
 ) 
 DELETE
@@ -183,18 +169,3 @@ FROM Nashville_Housing_Data
 
 ALTER TABLE Data_Cleaning_Project..Nashville_Housing_Data
 DROP COLUMN OwnerAddress, TaxDistrict, PropertyAddress, SaleDate
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
