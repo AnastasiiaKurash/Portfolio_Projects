@@ -60,8 +60,8 @@ WHERE nhd1.PropertyAddress IS NULL
 
 SELECT 
 	PropertyAddress
-	, SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1)                       AS Address
-	, SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress))    AS City
+	, SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1)                       AS Property_Address
+	, SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress))    AS Property_City
 FROM Data_Cleaning_Project..Nashville_Housing_Data
 
 ALTER TABLE Nashville_Housing_Data
