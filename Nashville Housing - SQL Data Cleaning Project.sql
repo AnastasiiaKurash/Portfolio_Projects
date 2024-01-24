@@ -56,7 +56,7 @@ WHERE nhd1.PropertyAddress IS NULL
 
 ------------------------------------------------------------------------------------
 
---Breaking out Address Into Individual Coiumns (Address, City, State)
+--Breaking out Address Into Individual Columns (Address, City, State)
 
 SELECT*
 FROM Nashville_Housing_Data
