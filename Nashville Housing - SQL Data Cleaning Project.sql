@@ -15,7 +15,7 @@ SELECT
 FROM Data_Cleaning_Project..Nashville_Housing_Data
 
 ALTER TABLE Nashville_Housing_Data
-Add SaleDateConverted Date
+ADD SaleDateConverted Date
 
 UPDATE Nashville_Housing_Data
 SET SaleDateConverted = cast(SaleDate as date)
@@ -71,13 +71,13 @@ SELECT
 FROM Data_Cleaning_Project..Nashville_Housing_Data
 
 ALTER TABLE Nashville_Housing_Data
-Add Property_Address nvarchar(255)
+ADD Property_Address nvarchar(255)
 
 UPDATE Nashville_Housing_Data
 SET Property_Address = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) - 1)
 
 ALTER TABLE Nashville_Housing_Data
-Add Property_City nvarchar(255)
+ADD Property_City nvarchar(255)
 
 UPDATE Nashville_Housing_Data
 SET Property_City = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1, LEN(PropertyAddress))
@@ -101,19 +101,19 @@ SELECT
 FROM Nashville_Housing_Data
 
 ALTER TABLE Nashville_Housing_Data
-Add Owner_Address nvarchar(255)
+ADD Owner_Address nvarchar(255)
 
 UPDATE Nashville_Housing_Data
 SET Owner_Address = PARSENAME(REPLACE(OwnerAddress, ',', '.'),3)
 
 ALTER TABLE Nashville_Housing_Data
-Add Owner_City nvarchar(255)
+ADD Owner_City nvarchar(255)
 
 UPDATE Nashville_Housing_Data
 SET Owner_City = PARSENAME(REPLACE(OwnerAddress, ',', '.'),2)
 
 ALTER TABLE Nashville_Housing_Data
-Add Owner_State nvarchar(255)
+ADD Owner_State nvarchar(255)
 
 UPDATE Nashville_Housing_Data
 SET Owner_State = PARSENAME(REPLACE(OwnerAddress, ',', '.'),1)
