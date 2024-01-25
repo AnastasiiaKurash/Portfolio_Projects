@@ -138,13 +138,13 @@ ORDER BY 2 DESC
 ------------------------------GLOBAL NUMBERS------------------------------
 
 --Total Cases per Day in the World VS Total Deaths per Day in the World
---(Ñï³ââ³äíîøåííÿ äàíèõ çàðàæåííÿ òà ñìåðòíîñò³ çà äíÿìè)
+--(Ratio of infection and mortality data by day)
 
 SELECT 
 	date
 	, SUM(total_cases)                                                  AS total_cases_in_the_world
 	, SUM(cast(total_deaths as int))                                    AS total_deaths_in_the_world
-	, ROUND((SUM(cast(total_deaths as int))/SUM(total_cases))*100, 2)   AS DeathPercentage              --(ñï³ââ³äíîøåííÿ)     --in whole world per day
+	, ROUND((SUM(cast(total_deaths as int))/SUM(total_cases))*100, 2)   AS DeathPercentage              
 --	, SUM(cast(new_deaths as int))                                      AS new_deaths_per_day
 --	, ROUND((SUM(cast(new_deaths as int))/SUM(total_cases))*100, 2)     AS WorldWideDeathPercentagePerDay
 FROM COVID_project..CovidDeaths
@@ -152,7 +152,7 @@ WHERE continent IS NOT NULL
 GROUP BY date
 ORDER BY 1
 
---Äí³, â ÿê³ áóëî çàô³êñîâàíî íàéá³ëüøå ÷èñëî ñìåðòåé ç ïðè÷èíè Ñovid ïî ñâ³òó
+--Days in which the highest number of deaths due to Covid were recorded worldwide
 
 SELECT 
 	date
@@ -162,17 +162,8 @@ WHERE continent IS NOT NULL
 GROUP BY date
 ORDER BY 2 DESC
 
--- Çàãàëüíà ê³ëüê³ñòü çàõâîð³ëèõ òà ïîìåðëèõ ïî ñâ³òó
-
-SELECT 
-	SUM(new_cases)                                                     AS total_new_cases
-	, SUM(cast(new_deaths as int))                                     AS total_new_deaths
-	, ROUND((SUM(cast(new_deaths as int))/SUM(new_cases))*100, 2)      AS DeathPercentage
-FROM COVID_project..CovidDeaths
-WHERE continent IS NOT NULL                   --áåç çàðåºñòðîâàíèõ 22.01.2020 (áî ¿õ íå â³äíåñëè â ñïèñîê íîâèõ íàäõîäæåíü àáî íîâèõ ñìåðòåé)
-
-
---(Âèêîðèñòîâ³ºìî CTE äëÿ ðîçðàõóíêó)
+-- Total number of cases and deaths worldwide
+--(Using CTE to perform Calculation)
 
 WITH CTE_cases_deaths AS
 (
@@ -184,7 +175,7 @@ WITH CTE_cases_deaths AS
 			WHERE continent is not null
 				AND date = '2020-01-22'
 			GROUP BY date
-		) + SUM(new_cases)                                         AS total_new_cases
+		) + SUM(new_cases)                                                 AS total_new_cases
 		, 
 		(
 			SELECT 
@@ -193,27 +184,24 @@ WITH CTE_cases_deaths AS
 			WHERE continent is not null
 				AND date = '2020-01-22'
 			GROUP BY date
-		) + SUM(cast(new_deaths as int))                           AS total_new_deaths 
+		) + SUM(cast(new_deaths as int))                                   AS total_new_deaths 
 	FROM COVID_project..CovidDeaths
 	WHERE continent IS NOT NULL
 )
 SELECT 
 	*
-	, ROUND((total_new_deaths /total_new_cases)*100, 2)            AS DeathPercentage
+	, ROUND((total_new_deaths /total_new_cases)*100, 2)                        AS DeathPercentage
 FROM CTE_cases_deaths
-                                                           --ç çàðåºñòðîâàíèìè äàíèìè çà 22.01.2020
 													
 
 ------------------------------Population vs Vaccinations------------------------------
-
---Äîºäíóºìî äëÿ äîñë³äæåííÿ äàí³ ç òàáëèö³ âàêöèíàö³¿
 
 SELECT *
 FROM COVID_project..CovidVaccinations
 WHERE continent IS NOT NULL
 ORDER BY 3, 4
 
---Çàãàëüíà ê³ëüê³ñòü ïðîâåäåííÿ âàêöèíóâàííÿ â ñâ³ò³ çà äåíü
+--The total number of vaccinations in the world per day
 
 SELECT                                             
 --	death.continent, death.location,                 
@@ -227,7 +215,7 @@ WHERE death.continent IS NOT NULL
 GROUP BY death.date
 ORDER BY 1
 
---Ñê³ëüêè âàêöèíàö³é áóëî çä³éñíåíî êîæíîãî äíÿ â ìåæàõ êðà¿í
+--Shows how many vaccinations were carried out every day in countries
 
 SELECT 
 	death.continent
@@ -241,8 +229,8 @@ JOIN COVID_project..CovidVaccinations vac
 WHERE death.continent IS NOT NULL
 ORDER BY 2, 3
 
---Â³äñîòêîâå ñï³ââ³äíîøåííÿ íàñåëåííÿ òà çä³éñíåíèõ âàêöèíàö³é â³ä Covid
---(Âèêîðèñòîâ³ºìî CTE äëÿ ðîçðàõóíêó)
+--Percentage of population VS completed Covid vaccinations
+--(Using CTE to perform Calculation)
 
 WITH CTE_running_totals_of_vaccinations AS
 (
@@ -271,7 +259,7 @@ FROM CTE_running_totals_of_vaccinations
 GROUP BY continent, location
 ORDER BY 2 
 
---(Âèêîðèñòîâóºìî Temp_Table äëÿ ðîçðàõóíêó) 
+--(Using Temp Table to perform Calculation on Partition By in previous query) 
 
 DROP TABLE IF EXISTS #temp
 
@@ -311,7 +299,7 @@ FROM #temp
 GROUP BY Continent, Location
 ORDER BY 2
 
---Íàéá³ëüø³ ïîêàçíèêè â³äñîòêó íàñåëåííÿ, ùî ïðîéøîâ ïîâíó âàêöèíàö³þ, ñåðåä êðà¿í
+--Shows rates of a percentage of the population fully vaccinated among countries
 
 SELECT                                             
 	death.continent
